@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>CareerPilot AI</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>CareerPilot AI</h1>
+
+        <form method="POST">
+
+            <textarea
+                name="skills"
+                placeholder="Enter your skills..."
+            ></textarea>
+
+            <br>
+
+            <button type="submit">
+
+                Predict Career
+
+            </button>
+
+        </form>
+
+        {% if prediction %}
+
+        <div class="result-box">
+
+            <h2>
+                Predicted Role:
+                {{ prediction }}
+            </h2>
+
+            {% for category, skills in gaps.items() %}
+
+                <h3>{{ category }}</h3>
+
+                <ul>
+
+                    {% for skill in skills %}
+
+                        <li>{{ skill }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
