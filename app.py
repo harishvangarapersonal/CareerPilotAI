@@ -5,6 +5,16 @@ import re
 import string
 import nltk
 
+# =========================================
+# DOWNLOAD NLTK DATA
+# =========================================
+
+nltk.download('stopwords')
+
+nltk.download('wordnet')
+
+nltk.download('omw-1.4')
+
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
@@ -30,7 +40,9 @@ vectorizer = pickle.load(
 # NLP SETUP
 # =========================================
 
-stop_words = set(stopwords.words('english'))
+stop_words = set(
+    stopwords.words('english')
+)
 
 lemmatizer = WordNetLemmatizer()
 
@@ -48,17 +60,25 @@ def preprocess_text(text):
         text
     )
 
-    text = re.sub(r'\d+', '', text)
+    text = re.sub(
+        r'\d+',
+        '',
+        text
+    )
 
     words = text.split()
 
     words = [
+
         word for word in words
+
         if word not in stop_words
     ]
 
     words = [
+
         lemmatizer.lemmatize(word)
+
         for word in words
     ]
 
@@ -70,11 +90,17 @@ def preprocess_text(text):
 
 def predict_career(skills):
 
-    cleaned = preprocess_text(skills)
+    cleaned = preprocess_text(
+        skills
+    )
 
-    vector = vectorizer.transform([cleaned])
+    vector = vectorizer.transform(
+        [cleaned]
+    )
 
-    prediction = model.predict(vector)
+    prediction = model.predict(
+        vector
+    )
 
     return prediction[0]
 
@@ -87,6 +113,7 @@ career_skills = {
     "Data Scientist": {
 
         "Core Skills": [
+
             "python",
             "machine learning",
             "statistics",
@@ -98,6 +125,7 @@ career_skills = {
         ],
 
         "Libraries": [
+
             "pandas",
             "numpy",
             "scikit learn",
@@ -106,6 +134,7 @@ career_skills = {
         ],
 
         "Visualization Tools": [
+
             "power bi",
             "tableau",
             "matplotlib",
@@ -116,6 +145,7 @@ career_skills = {
     "AI Engineer": {
 
         "Core Skills": [
+
             "python",
             "deep learning",
             "nlp",
@@ -124,6 +154,7 @@ career_skills = {
         ],
 
         "Libraries": [
+
             "tensorflow",
             "pytorch",
             "hugging face",
@@ -137,7 +168,9 @@ career_skills = {
 # =========================================
 
 def advanced_skill_gap_analysis(
+
     user_skills,
+
     predicted_role
 ):
 
@@ -167,7 +200,9 @@ def advanced_skill_gap_analysis(
             skill_words = processed_skill.split()
 
             if not all(
+
                 word in user_skill_list
+
                 for word in skill_words
             ):
 
@@ -181,7 +216,12 @@ def advanced_skill_gap_analysis(
 # HOME ROUTE
 # =========================================
 
-@app.route("/", methods=["GET", "POST"])
+@app.route(
+
+    "/",
+
+    methods=["GET", "POST"]
+)
 
 def home():
 
@@ -198,13 +238,18 @@ def home():
         )
 
         gaps = advanced_skill_gap_analysis(
+
             skills,
+
             prediction
         )
 
     return render_template(
+
         "index.html",
+
         prediction=prediction,
+
         gaps=gaps
     )
 
@@ -215,6 +260,8 @@ def home():
 if __name__ == "__main__":
 
     app.run(
+
         host="0.0.0.0",
+
         port=5000
     )
